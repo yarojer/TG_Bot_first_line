@@ -56,6 +56,10 @@ async def handle_apifa_api_key(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     api_key = message.text
 
+    # Инициализация данных пользователя, если они не существуют
+    if user_id not in user_data:
+        user_data[user_id] = {}
+
     # Сохранение API ключа
     os.environ["API_RK_KEY"] = api_key
     user_data[user_id]['api_key'] = api_key  # Сохраняем ключ в user_data
@@ -68,6 +72,7 @@ async def handle_apifa_api_key(message: types.Message, state: FSMContext):
     )
     await message.answer("Что именно анализируем?", reply_markup=keyboard)
     await state.set_state(APIRKStates.waiting_for_rkanalysis_choice)
+
 
 # Обработка выбора типа анализа 
 @router.callback_query(F.data.in_(['fullrk_report']), StateFilter(APIRKStates.waiting_for_rkanalysis_choice))

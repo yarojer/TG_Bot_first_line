@@ -29,9 +29,9 @@ def get_advert_ids(api_key):
                         for item in advert['advert_list']:
                             # Сохраняем advertId в список
                             advert_ids.append(item['advertId'])
-
+            logger.info(f"Состояние пользователя {advert_ids}")
             return advert_ids
-
+            
         else:
             print(f"Ошибка: {response.status_code} - {response.text}")
             return []
@@ -40,6 +40,3 @@ def get_advert_ids(api_key):
         print(f"Произошла ошибка: {e}")
         return []
 
-# Пример использования функции
-advert_ids = get_advert_ids(api_key)
-logger.info(f"Состояние пользователя {advert_ids}")
