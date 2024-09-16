@@ -10,7 +10,7 @@ def generate_dates(start_date, end_date):
         yield current_date
         current_date += timedelta(days=1)
 
-api_key = "eyJhbGciOiJFUzI1NiIsImtpZCI6IjIwMjQwNzE1djEiLCJ0eXAiOiJKV1QifQ.eyJlbnQiOjEsImV4cCI6MTczNjk5MjMwMSwiaWQiOiJiMTE2MWQ0Ny1iYTc3LTQ4MjgtYjg4Yy01ZWQxZjc3NzBkOGEiLCJpaWQiOjQ1ODAwNDYyLCJvaWQiOjE3MjkxLCJzIjoxMDczNzQxODg4LCJzaWQiOiI5NDM1ZjFiYy03NzFiLTU3YzEtYWUyMC1kMjlmYTNmZWRhOWUiLCJ0IjpmYWxzZSwidWlkIjo0NTgwMDQ2Mn0.7yCwqG1gknrDNGkMEcsfkAdiStj3OJv58Nl-YsR7BZEBSSO-OW8cyP94wP3_w-yck3X-JzK8stEsgFM6mDOG2g"
+
 
 date_from = auth_sheet['B3'].value
 date_to = auth_sheet['B4'].value

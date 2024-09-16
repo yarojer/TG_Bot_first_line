@@ -14,7 +14,7 @@ async def start(message: types.Message):
             [InlineKeyboardButton(text="ФА", callback_data='fa')],
             [InlineKeyboardButton(text="Хранение", callback_data='storage')],
             [InlineKeyboardButton(text="ФА API", callback_data='apifa')],
-            [InlineKeyboardButton(text="Рекламные расходы", callback_data='rkexp')]
+            [InlineKeyboardButton(text="Рекламные расходы(В работе)", callback_data='rkexp')]
         ]
     )
 
