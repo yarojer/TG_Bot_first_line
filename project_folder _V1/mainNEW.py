@@ -8,7 +8,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from handlers_faNEW import router as fa_router  # FSM для анализа файлов (FA)
 from handlers_storageNEW import router as storage_router  # FSM для анализа данных хранения
 from handlers_api_fa import router as apifa_router
-from handlers_api_RKexp import router as apirk_router  # FSM для анализа FA API
+from handlers_api_rkexp import router as apirk_router  # FSM для анализа FA API
 from handlers import start
 from config import BOT_TOKEN
 

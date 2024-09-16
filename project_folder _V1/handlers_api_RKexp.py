@@ -10,6 +10,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import Command, StateFilter
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InputFile
 from aiogram.types import FSInputFile
+from rk_sum import get_advert_ids
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,8 +25,8 @@ user_data = {}
 router = Router()
 
 # Обработчик команды
-@router.message(Command('RKexp'))
-async def handle_RKexp(message: types.Message, state: FSMContext):
+@router.message(Command('rkexp'))
+async def handle_rkexp(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     user_data[user_id] = {'current_state': 'waiting_for_rkapi_key'}
 
@@ -35,11 +36,11 @@ async def handle_RKexp(message: types.Message, state: FSMContext):
     await state.set_state(APIRKStates.waiting_for_rkapi_key)
 
 # Обработчик нажатия кнопки
-@router.callback_query(lambda callback_query: callback_query.data == "RKexp")  
+@router.callback_query(lambda callback_query: callback_query.data == "rkexp")  
 async def button_click_RKexp(callback_query: types.CallbackQuery, state: FSMContext):
     user_id = callback_query.from_user.id
 
-    await state.update_data(files=[], analysis_type='RKexp')
+    await state.update_data(analysis_type='rkexp')
     await state.set_state(APIRKStates.waiting_for_rkapi_key)
 
     await callback_query.message.answer(
@@ -56,20 +57,20 @@ async def handle_apifa_api_key(message: types.Message, state: FSMContext):
     api_key = message.text
 
     # Сохранение API ключа
-    os.environ["API_FA_KEY"] = api_key
+    os.environ["API_RK_KEY"] = api_key
     user_data[user_id]['api_key'] = api_key  # Сохраняем ключ в user_data
 
     # Запрос на выбор типа анализа
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Все РК", callback_data='fullRK_report')],
+            [InlineKeyboardButton(text="Все РК", callback_data='fullrk_report')],
         ]
     )
     await message.answer("Что именно анализируем?", reply_markup=keyboard)
     await state.set_state(APIRKStates.waiting_for_rkanalysis_choice)
 
 # Обработка выбора типа анализа 
-@router.callback_query(F.data.in_(['fullRK_report']), StateFilter(APIRKStates.waiting_for_rkanalysis_choice))
+@router.callback_query(F.data.in_(['fullrk_report']), StateFilter(APIRKStates.waiting_for_rkanalysis_choice))
 async def button_click_rk(query: types.CallbackQuery, state: FSMContext):
     user_id = query.from_user.id
     choice = query.data
@@ -78,7 +79,7 @@ async def button_click_rk(query: types.CallbackQuery, state: FSMContext):
     
     if choice == 'fullrk_report':
         # Если выбран полный отчет, запрашиваем период анализа
-        await state.update_data(analysisrk_type='fullrk_report')
+        await state.update_data(analysis_type='fullrk_report')
         await query.message.answer("Пожалуйста, укажите период анализа в формате ДД.ММ.ГГГГ-ДД.ММ.ГГГГ.")
         await state.set_state(APIRKStates.waiting_for_rkanalysis_period)
 
@@ -98,12 +99,12 @@ async def handle_analysis_period(message: types.Message, state: FSMContext, bot:
         user_data[user_id]['analysis_end_date'] = end_date
 
         api_key = user_data[user_id]['api_key']
-        analysis_type = data.get('analysisrk_type')
+        analysis_type = data.get('analysis_type')
 
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
-        df = (api_key, start_date_str, end_date_str, user_id, timestamp)
-
+        ##df = (api_key, start_date_str, end_date_str, user_id, timestamp)
+        get_advert_ids(api_key)
 
 
         # Отправка файла пользователю
